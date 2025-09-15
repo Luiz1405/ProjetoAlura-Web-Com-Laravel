@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Serie;
 use Illuminate\Http\Request;
 
-class SeriesController 
+class SeriesController extends Controller
 {
-    
+
     public function index()
     {
         $series = Serie::all();
 
-       return view('series/index', [
-        'series' => $series]);
+        return view('series.index', [
+            'series' => $series
+        ]);
     }
 
     public function create()
@@ -23,12 +24,8 @@ class SeriesController
 
     public function store(Request $request)
     {
-        $nomeDaSerie = $request->input('nome');
-        $serie = new Serie();
-        $serie->nome = $nomeDaSerie;
+        Serie::create($request->all());
 
-        $serie->save();
-
-        return redirect('/series');
+        return to_route('series.index');
     }
 }
