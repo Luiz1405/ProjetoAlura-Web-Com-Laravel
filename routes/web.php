@@ -10,5 +10,8 @@ Route::get('/', function () {
 Route::resource('/series', SeriesController::class)->only([
     'index',
     'create',
-    'store'
+    'store',
+    'destroy',
+    'edit',
+    'update'
 ]);

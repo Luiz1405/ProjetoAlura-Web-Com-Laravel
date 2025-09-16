@@ -8,12 +8,16 @@ use Illuminate\Http\Request;
 class SeriesController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $series = Serie::all();
+        $series = Serie::query()->orderBy('nome')->get();
+
+        $mensagemSucesso = $request->session()->get('mensagem.sucesso');
+        $serieAdicionadaComSucesso = $request->session()->get('mensagem.sucesso');
 
         return view('series.index', [
-            'series' => $series
+            'series' => $series,
+            'mensagemSucesso' => $mensagemSucesso
         ]);
     }
 
@@ -24,8 +28,35 @@ class SeriesController extends Controller
 
     public function store(Request $request)
     {
-        Serie::create($request->all());
+        $serie = Serie::create($request->all());
 
-        return to_route('series.index');
+        return to_route('series.index')->with('mensagem.sucesso', "A série {$serie->nome}  foi adicionada com sucesso");
+    }
+
+    public function destroy(Serie $series, Request $request)
+    {
+
+        $serie = Serie::find($request->series);
+
+        $series->delete();
+
+        return to_route('series.index')->with('mensagem.sucesso', "A série '{$series->nome}' foi removida com sucesso");
+    }
+
+    public function edit(Serie $series)
+    {
+
+        //dd($serie);
+        return view('series.edit')->with('series', $series);
+    }
+
+    public function update(Serie $series, Request $request)
+    {
+
+        //dd($series);
+
+        $series->update($request->all());
+
+        return to_route('series.index')->with('mensagem.sucesso', "A série '{$series->nome}' foi editada com sucesso");
     }
 }
