@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SeasonsController;
 use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,3 +16,5 @@ Route::resource('/series', SeriesController::class)->only([
     'edit',
     'update'
 ]);
+
+Route::get('/serie/{series}/season', [SeasonsController::class, 'index'])->name('seasons.index');
